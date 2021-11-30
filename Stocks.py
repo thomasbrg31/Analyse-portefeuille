@@ -304,12 +304,11 @@ elif action=='Multi assets':
     #Calcul de la valeur du portefeuille
     pf_price=df['Close'][tickers]*nb
     pf_price['Valeur portefeuille']=pf_price[pf_price.columns].sum(axis=1)
-    
+    pf_price=pf_price.dropna()
     ytd=datetime.datetime.today().year-1
     last_day=datetime.date(ytd,12,31)
     df2=yf.download(tickers,start=last_day,end=datetime.datetime.today(),progress=False)
     pf_price2=df2['Close'][tickers]*nb
-    
     pf_price2['Valeur portefeuille']=pf_price2[pf_price2.columns].sum(axis=1)
     pf_price2=pf_price2.dropna()
     import math
@@ -332,7 +331,7 @@ elif action=='Multi assets':
     col3.metric('Perf MTD',"{:.2%}".format(perf_mtd))
     
     import plotly.express as px
-    fig = px.line(pf_price2['Valeur portefeuille'])
+    fig = px.line(pf_price['Valeur portefeuille'])
     fig.update_layout(
         autosize=False,
         width=800,
